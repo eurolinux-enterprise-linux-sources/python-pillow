@@ -23,12 +23,12 @@
 
 Name:           python-pillow
 Version:        2.0.0
-Release:        12%{?snap}%{?dist}
+Release:        19%{?snap}%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
 License:        MIT
-URL:            http://python-imaging.github.com/Pillow/
+URL:            http://python-pillow.github.io/
 
 # Obtain the tarball for a certain commit via:
 #  wget --content-disposition https://github.com/python-imaging/Pillow/tarball/$commit
@@ -38,6 +38,8 @@ Source0:        https://github.com/python-imaging/Pillow/tarball/%{commit}/pytho
 Patch0:         python-pillow-archs.patch
 # Fix test hardcoded for little-endian
 Patch1:         python-pillow_endian.patch
+Patch2:         python-pillow-2.0.0_bytearray.patch
+Patch3:         python-pillow-2.0.0_memleaks.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
@@ -49,7 +51,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  freetype-devel
 BuildRequires:  sane-backends-devel
 # Don't build with webp support on s390* and ppc* archs
-# see bug #962091
+# see bug #962091 and #1127230
 %ifnarch s390 s390x ppc ppc64
 BuildRequires:  libwebp-devel
 %endif
@@ -203,6 +205,8 @@ PIL image wrapper for Qt.
 %setup -q -n python-imaging-Pillow-%{shortcommit}
 %patch0 -p1 -b .archs
 %patch1 -p1 -b .endian
+%patch2 -p1 -b .byte_array
+%patch3 -p1 -b .memleaks
 
 %if %{with_python3}
 # Create Python 3 source tree
@@ -360,6 +364,26 @@ popd
 %endif
 
 %changelog
+* Mon Oct 06 2014 Michal Minar <miminar@redhat.com> 2.0.0-19gitd1c6db8
+- Reenabled webp support on little endian archs.
+
+* Mon Aug 18 2014 Michal Minar <miminar@redhat.com> 2.0.0-18gitd1c6db8
+- Disabled webp support on ppc64le due to #962091 and #1127230.
+- Updated URL.
+
+* Fri Feb 21 2014 Michal Minar <miminar@redhat.com> 2.0.0-17gitd1c6db8
+- Wiped out some memory leaks.
+
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.0.0-15.gitd1c6db8
+- Mass rebuild 2014-01-24
+
+* Tue Jan 14 2014 Michal Minar <miminar@redhat.com> 2.0.0-14gitd1c6db8
+- Fixed memory corruption.
+- Resolves: rhbz#1001122
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.0.0-13.gitd1c6db8
+- Mass rebuild 2013-12-27
+
 * Mon Jul 29 2013 Roman Rakus <rrakus@redhat.com> - 2.0.0-12
 - Mark doc subpackage arch dependent. Docs are built depending on supported
   features, which are different across archs.
