@@ -23,7 +23,7 @@
 
 Name:           python-pillow
 Version:        2.0.0
-Release:        17%{?snap}%{?dist}
+Release:        12%{?snap}%{?dist}
 Summary:        Python image processing library
 
 # License: see http://www.pythonware.com/products/pil/license.htm
@@ -38,8 +38,6 @@ Source0:        https://github.com/python-imaging/Pillow/tarball/%{commit}/pytho
 Patch0:         python-pillow-archs.patch
 # Fix test hardcoded for little-endian
 Patch1:         python-pillow_endian.patch
-Patch2:         python-pillow-2.0.0_bytearray.patch
-Patch3:         python-pillow-2.0.0_memleaks.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
@@ -205,8 +203,6 @@ PIL image wrapper for Qt.
 %setup -q -n python-imaging-Pillow-%{shortcommit}
 %patch0 -p1 -b .archs
 %patch1 -p1 -b .endian
-%patch2 -p1 -b .byte_array
-%patch3 -p1 -b .memleaks
 
 %if %{with_python3}
 # Create Python 3 source tree
@@ -364,19 +360,6 @@ popd
 %endif
 
 %changelog
-* Fri Feb 21 2014 Michal Minar <miminar@redhat.com> 2.0.0-17gitd1c6db8
-- Wiped out some memory leaks.
-
-* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.0.0-15.gitd1c6db8
-- Mass rebuild 2014-01-24
-
-* Tue Jan 14 2014 Michal Minar <miminar@redhat.com> 2.0.0-14gitd1c6db8
-- Fixed memory corruption.
-- Resolves: rhbz#1001122
-
-* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.0.0-13.gitd1c6db8
-- Mass rebuild 2013-12-27
-
 * Mon Jul 29 2013 Roman Rakus <rrakus@redhat.com> - 2.0.0-12
 - Mark doc subpackage arch dependent. Docs are built depending on supported
   features, which are different across archs.
